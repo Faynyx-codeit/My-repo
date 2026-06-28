@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motivation Quotes - Copilot in Codespaces</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .quote-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 30px;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quote-text {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .quote-author {
+            font-size: 1.1em;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-next {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-copy {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-copy:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .quote-number {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .quote-text {
+                font-size: 1.2em;
+            }
+
+            .quote-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💡 Motivation Quotes</h1>
+            <p>Get inspired while coding with Copilot in Codespaces</p>
+        </div>
+
+        <div class="quote-card">
+            <div class="quote-text" id="quote">"The only way to do great work is to love what you do."</div>
+            <div class="quote-author" id="author">— Steve Jobs</div>
+            <div class="button-group">
+                <button class="btn-next" onclick="nextQuote()">Next Quote</button>
+                <button class="btn-copy" onclick="copyQuote()">Copy Quote</button>
+            </div>
+            <div class="quote-number">
+                Quote <span id="current">1</span> of <span id="total">12</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            {
+                text: "The only way to do great work is to love what you do.",
+                author: "Steve Jobs"
+            },
+            {
+                text: "Code is poetry written in a language that the computer can understand.",
+                author: "Unknown"
+            },
+            {
+                text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+                author: "Martin Fowler"
+            },
+            {
+                text: "The best way to predict the future is to invent it.",
+                author: "Alan Kay"
+            },
+            {
+                text: "Debugging is like being the detective in a crime drama, except you are also the murderer.",
+                author: "Filipe Fortes"
+            },
+            {
+                text: "Programming is not about what you know; it's about what you can figure out.",
+                author: "Chris Pine"
+            },
+            {
+                text: "First, solve the problem. Then, write the code.",
+                author: "John Johnson"
+            },
+            {
+                text: "The most important thing about code is that it should be readable and maintainable.",
+                author: "Robert C. Martin"
+            },
+            {
+                text: "Don't just follow the tutorial. Understand it, break it, and rebuild it.",
+                author: "Unknown"
+            },
+            {
+                text: "Every expert was once a beginner who refused to give up.",
+                author: "Unknown"
+            },
+            {
+                text: "Code today, regret tomorrow. Comment today, relax tomorrow.",
+                author: "Unknown"
+            },
+            {
+                text: "Your code is the problem. Your understanding is the solution.",
+                author: "Unknown"
+            }
+        ];
+
+        let currentIndex = 0;
+
+        function displayQuote() {
+            const quote = quotes[currentIndex];
+            document.getElementById('quote').textContent = `"${quote.text}"`;
+            document.getElementById('author').textContent = `— ${quote.author}`;
+            document.getElementById('current').textContent = currentIndex + 1;
+            document.getElementById('total').textContent = quotes.length;
+        }
+
+        function nextQuote() {
+            currentIndex = (currentIndex + 1) % quotes.length;
+            displayQuote();
+        }
+
+        function copyQuote() {
+            const quote = quotes[currentIndex];
+            const text = `"${quote.text}" — ${quote.author}`;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Quote copied to clipboard!');
+            }).catch(() => {
+                alert('Failed to copy quote');
+            });
+        }
+
+        // Display first quote on page load
+        displayQuote();
+
+        // Optional: Auto-change quotes every 10 seconds
+        // setInterval(nextQuote, 10000);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQuote();
+            if (e.key === ' ') {
+                e.preventDefault();
+                copyQuote();
+            }
+        });
+    </script>
+</body>
+</html>
